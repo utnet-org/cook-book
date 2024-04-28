@@ -23,60 +23,73 @@ rustc --version
 
 ```
 
+we get something like this:
+
+![rust](../../images/rust.svg)
+
 + 安装常用的系统工具：netstat、iostat、awk、df
 + awk/df一般都是默认安装的，其它工具可使用以下命令安装：
 
 ```sh
-apt install net-tools
-apt install sysstat
+sudo apt install net-tools
+sudo apt install sysstat
 ```
 
 + 安装openssl依赖
 
 ```sh
 
-apt install pkg-config libssl-dev libclang-dev -y
-apt-get install --assume-yes libudev-dev
-
-+ 如果cargo依赖的源有无法访问的，需要配置国内的源
-在当前用户的~/.cargo/config里面增加如下配置(如果是root用户，则是/root/.cargo/config)
-```toml
-
-[source.crates-io]
-replace-with = 'tuna'
-
-[source.ustc]
-registry = "<https://mirrors.ustc.edu.cn/crates.io-index>"
-
-[source.tuna]
-registry = "<https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git>"
-
-[http]
-multiplexing = false
-
-```
+sudo apt install pkg-config libssl-dev libclang-dev -y
+sudo apt-get install --assume-yes libudev-dev
 
 + 安装unc cli 和 unc-node
 
 ```sh
-# 安装 unc 工具
+# 安装 unc-cli 工具
 curl --proto '=https' --tlsv1.2 -LsSf https://github.com/utnet-org/utility-cli-rs/releases/download/v0.8.2/utility-cli-rs-installer.sh | sh
-
-# 下载unc-node 节点, 如 2204/2004/2310 任意适合包
-wget https://github.com/utnet-org/utility/releases/download/v0.7.3/x86_64-ubuntu-2204-unc-node.tar.gz
-wget https://github.com/utnet-org/utility/releases/download/v0.7.3/x86_64-ubuntu-2004-unc-node.tar.gz
-
-# 解压得到 unc-node 二进制文件, 放置在/opt/unc-node/, 后面有用
-tar -zxvf x86_64-ubuntu-2204-unc-node.tar.gz
 
 # 安装验证者cli 工具
 cargo install unc-validator
+
+# 下载unc-node 节点, 如 2004/2204 任意适合包
+wget -O - https://github.com/utnet-org/utility/releases/download/v0.7.3/x86_64-ubuntu-2004-unc-node.tar.gz | tar -xz
+
+or
+
+wget -O - https://github.com/utnet-org/utility/releases/download/v0.7.3/x86_64-ubuntu-2204-unc-node.tar.gz | tar -xz
+
+
+# 解压得到 unc-node 二进制文件, 放置在/opt/unc-node/, 后面有用
+sudo mkdir /opt/unc-node
+sudo chmod 777 /opt/unc-node
+cp unc-node  /opt/unc-node/
+
 ```
+
+we get something like this:
+
+![cli](../../images/unc-cli.svg)
+![unc-node](../../images/unc-node.svg)
 
 ## 2. 集群机器的统一配置
 
 + 确保libc的版本，可以运行我们rust编译出来的二进制程序
+
+```sh
+ldd --version
+ldd (Ubuntu GLIBC 2.35-0ubuntu3.7) 2.35
+Copyright (C) 2022 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+Written by Roland McGrath and Ulrich Drepper.
+```
+
 + 机器上需要正确安装node(可shell正确执行node和npm命令)， version 18
+
+```sh
+node -v
+v21.7.3
+```
   
 # 二. 配置文件的编写
 
@@ -86,7 +99,7 @@ cargo install unc-validator
 ```sh
 
 # testnet node init directly use binaries
-unc-node --home /opt/unc-node  init --chain-id testnet --download-genesis --download-config
+/opt/unc-node/unc-node  --home /opt/unc-node  init --chain-id testnet --download-genesis --download-config
 
 # download snapshot data （optional）
 ## install rclone 1.66.0 or beyond
@@ -108,27 +121,43 @@ acl = public-read
 ## download data 
 $ rclone copy --no-check-certificate unc_cf:unc/latest ./
 $ latest=$(cat latest)
-$ rclone copy --no-check-certificate --progress --transfers=6  unc_cf:unc/${latest:?} ~/.unc/data
+$ rclone copy --no-check-certificate --progress --transfers=6  unc_cf:unc/${latest:?}.tar.gz /tmp
+
+$ 解压快照到/opt/unc-node/data
+tar -zxvf /tmp/${latest:?}.tar.gz -C /tmp  && mv /tmp/${latest:?}/data /opt/unc-node
+
+```
+
+we get something like this:
+
+![rust](../../images/node-init.svg)
+![snapshot](../../images/snapshot.svg)
+
+# 三. 创建账户并转账
 
 ## 使用 unc cli 创建账户/转账/添加key操作
+
 ```sh
 ## create new accounts 用例, 使用自己创建的account id 而不是用例里面的`fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94802ce420c94ebb25bc43`
 unc account create-account fund-later use-auto-generation save-to-folder ~/.unc-credentials/implicit
 ## as follows:
 ## fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94802ce420c94ebb25bc43.json
 
-## 通过unc 基金会账户 给新创建的账户`fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94802ce420c94ebb25bc43`  100K unc coin
+## 通过unc基金会账户或者水龙头 给新创建的账户一些资助(pledge 质押需要unc 代币)`fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94802ce420c94ebb25bc43`  100K unc coin
 unc tokens unc send-unc fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94802ce420c94ebb25bc43 '100000 unc' network-config testnet sign-with-keychain send
 
-## 在 ～/.unc 目录 `touch validator_key.json`, 验证者信息, 从上面的创建的账户~/.unc-credentials/implicit 信息填写即可  (optional)
+## 在 /opt/unc-node 目录下 执行`touch validator_key.json` 命令, 验证者信息, 从上面的创建的账户~/.unc-credentials/implicit 信息填写即可  (optional)
 
 {
     "account_id": "fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94802ce420c94ebb25bc43"
     "public_key":"ed25519:EYM66gAFekoEgLjicPyvZQiFRrbvNsWjVDQQ11fASV3Q",
     "private_key":"ed25519:3NVx4sHxBJciEH2wZoMig8YiMx1Q84Ur2RWTd2GQ7JNfWdyDxwwYrUR6XtJR3YcYeWh9NzVEmsnYe2keB97mVExZ"
 }
-
 ```
+
+we get something like this:
+
+![create-account](../../images/create-account.svg)
 
 # 四. 正式部署服务和配置
 
@@ -137,9 +166,13 @@ unc tokens unc send-unc fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94802ce420c94e
 + unc-node.ecosystem.config.js 文件内容如下:
   其中unc-node 上面的下载节点路径
 
-```json
+```js
 module.exports = {"apps":[{"name":"unc-node","script":"/opt/unc-node/unc-node","env":{"HOME":"/opt/unc-node"},"exec_mode":"fork","watch":"false","autorestart":true,"restart_delay":5000,"cwd":"/opt/unc-node","args":" --home=/opt/unc-node run"}]}
 ```
+
+we get something like this:
+
+![pm2](../../images/pm2.svg)
 
 ## 2. 服务启动
 
@@ -150,13 +183,18 @@ pm2 start unc-node.ecosystem.config.js
 通过pm2 list来查看服务的运行状态  
 比如在miner-mach1上，pm2 list显式如下
 
-│ id  │ name               │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
-├─────┼────────────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
-│ 2   │ unc-node         │ default     │ 0.0.299 │ fork    │ 37988    │ 2h     │ 0    │ online    │ 0%       │ 24.7mb   │ root     │ enabled  │
+┌────┬─────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name        │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼─────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ unc-node    │ default     │ N/A     │ fork    │ 466460   │ 91s    │ 0    │ online    │ 0%       │ 154.5mb  │ ubuntu   │ enabled  │
+└────┴─────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
 
 可见这台机器上的unc-node服务都正常启动了，并且运行正常，没有反复重启
 
 通过pm2 logs 确保unc-node服务已经正确启动了,  链同步快照都下载完成或者同步完成, 没有error 级别日志, 正常打印区块高度
+we get something like this:
+
+![node-log](../../images/node-log.svg)
 
 ## 3. 发起质押
 
@@ -172,7 +210,7 @@ unc-validator pledging view-pledge fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc948
 
 ```
 
-## 注册矿工上链
+## 4.注册矿工上链(只有基金会有权限操作, 矿工略过)
 
 ```sh
 ## 使用基金会账户unc 注册Rsa2048 keys
@@ -185,7 +223,7 @@ unc extensions register-rsa-keys unc use-file ~/.unc/keys/batch_register.json.sa
 unc account add-key c92fa60934dd1a5a444e171168544d30b7a9dd349786412f8a3003bfc1d126b3 grant-full-access use-manually-provided-public-key rsa2048:2TuPVgMCHJy5atawrsADEzjP7MCVbyyCA89UW6Wvjp9HrAzK4ZdyEHxs7qVnPrrF3R6w3zNJoHz828bNNJq9f6FPqyq9hsRP47qNXu1mcxeqWmRr8TKTBMLQNzNcjZVm6qX2BiSdXetAZsjPBMC6TyC2smee4s5Mqc4uh5rc5v7Z6nHWGxttHbhHGUCyWtgNGgPevFB2odsTdaXgcgWKtR3zLD6qrbaw631yNEJhverkLMrQJz436L21JWkgXpcTDRYPNWnk7DbztgA6RcgLmve3EG125eW2c2Bj7DkkWAVeWHZnXboDM8kYhAEbfRqUuKwn9K1m9adMqfig4xmM5wxGGABu5dD1gmthQRytLF1y3o2kpTtgrsNyBVTkqV7eMR9qJhUxwiU1rXdQKJ network-config testnet sign-with-keychain send
 ```
 
-## 发起链上挑战
+## 5.发起链上挑战(运维开发人员不用关心)
 
 ```sh
 unc extensions create-challenge-rsa fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94802ce420c94ebb25bc43 use-file ~/.unc/keys/challenge.json.sample without-init-call network-config custom sign-with-access-key-file ~/.unc/Unc4/signer_key.json send
@@ -234,4 +272,4 @@ unc extensions create-challenge-rsa fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94
 
 # 至此，节点已经冷启动完毕
 
-可以使用unc/unc-validator相关工具进行账户相关操作
+可以使用unc/unc-validator相关工具进行账户相关操作, 使用pm2 监控节点
