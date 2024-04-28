@@ -29,4 +29,5 @@ the interesting bits. The chapters are classified into three parts:
   you want to document something and it doesn't cleanly map to a category above,
   just put it in misc!
 
-If you are unsure, start with [Overview](./node/)
+If you are unsure, start with [Overview](./node/) and then
+read [Run a Node](./node/run_a_node.md)
