@@ -4,19 +4,15 @@
 
 # Architecture
 
-- [Overview](./README.md)
-- [How unc-node works](./how/README.md)
-  - [Run a Node](./node/run_a_node.md)
-- [How unc-miner work](./miner/README.md)
-  - [Miner C1](./miner/c1.md)
-  - [Miner C2](./miner/c2.md)
-- [Container Cloud](./container_cloud/README.md)
-  - [Container C1](./container_cloud/c1.md)
-  - [Container C2](./container_cloud/c2.md)
-
-# Practices
-
-- [Overview](./practices/README.md)
+- [Overview](./architecture/README.md)
+- [How unc-node works](./architecture/how/README.md)
+  - [Run a Node](./architecture/node/run_a_node.md)
+- [How unc-miner work](./architecture/miner/README.md)
+  - [Miner C1](./architecture/miner/c1.md)
+  - [Miner C2](./architecture/miner/c2.md)
+- [Container Cloud](./architecture/container_cloud/README.md)
+  - [Container C1](./architecture/container_cloud/c1.md)
+  - [Container C2](./architecture/container_cloud/c2.md)
 
 # Misc
 
