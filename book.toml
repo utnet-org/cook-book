@@ -9,5 +9,5 @@ title = "Guide to Utility Development"
 build-dir = "./target/book"
 
 [output.html]
-git-repository-url = "https://github.com/utnet-org/docs/tree/main"
-edit-url-template = "https://github.com/utnet-org/docs/edit/main/{path}"
+git-repository-url = "https://github.com/utnet-org/cook-book/tree/main"
+edit-url-template = "https://github.com/utnet-org/cook-book/edit/main/{path}"

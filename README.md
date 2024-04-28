@@ -18,7 +18,10 @@ the interesting bits. The chapters are classified into three parts:
 * [**Architecture**](./architecture/) talks about how the code works.
   So, for example, if you are interested in how a transaction flows through the
   system, look there!
-* [**Practices**](./practices/) describe, broadly, how we write code.
+* [**Miner**](./miner/) describe, broadly, how we write code.
+  For example, if you want to learn about code style, issue tracking, or
+  debugging performance problems, this is the chapter for you.
+* [**Container Cloud**](./container_cloud/) describe, broadly, how we write code.
   For example, if you want to learn about code style, issue tracking, or
   debugging performance problems, this is the chapter for you.
 * Finally, the [**Misc**](./misc/) part holds various assorted bits
