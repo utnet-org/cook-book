@@ -31,8 +31,7 @@ we get something like this:
 + awk/df一般都是默认安装的，其它工具可使用以下命令安装：
 
 ```sh
-sudo apt install net-tools
-sudo apt install sysstat
+sudo apt install net-tools sysstat make 
 ```
 
 + 安装openssl依赖
