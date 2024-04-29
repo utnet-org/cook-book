@@ -8,7 +8,7 @@ is on the protocol itself.
 
 If we put the entirety of framework onto one picture, we get something like this:
 
-![](../images/architecture.svg)
+![arch](../images/architecture.png)
 
 Don't worry if this doesn't yet make a lot of sense: hopefully, by the end of
 this document the above picture would become much clearer!
