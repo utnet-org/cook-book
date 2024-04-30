@@ -8,7 +8,7 @@
 ```sh
 
 # miner-mach 机器预装node.js
-# 使用 curl 下载 Node.js 18.x 安装脚本
+# 使用 curl 下载 Node.js 18.x or beyond 安装脚本
 curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
 
 # 安装 Node.js
@@ -25,14 +25,13 @@ rustc --version
 
 we get something like this:
 
-![rust](../../images/rust.svg)
+![rust](../../images/rust.png)
 
-+ 安装常用的系统工具：netstat、iostat、awk、df
++ 安装常用的系统工具：netstat、iostat、awk、df、build-essential
 + awk/df一般都是默认安装的，其它工具可使用以下命令安装：
 
 ```sh
-sudo apt install net-tools
-sudo apt install sysstat
+sudo apt install net-tools sysstat build-essential -y
 ```
 
 + 安装openssl依赖
@@ -41,6 +40,7 @@ sudo apt install sysstat
 
 sudo apt install pkg-config libssl-dev libclang-dev -y
 sudo apt-get install --assume-yes libudev-dev
+```
 
 + 安装unc cli 和 unc-node
 
@@ -68,8 +68,7 @@ cp unc-node  /opt/unc-node/
 
 we get something like this:
 
-![cli](../../images/unc-cli.svg)
-![unc-node](../../images/unc-node.svg)
+![unc-node](../../images/node.png)
 
 ## 2. 集群机器的统一配置
 
@@ -130,8 +129,7 @@ tar -zxvf /tmp/${latest:?}.tar.gz -C /tmp  && mv /tmp/${latest:?}/data /opt/unc-
 
 we get something like this:
 
-![rust](../../images/node-init.svg)
-![snapshot](../../images/snapshot.svg)
+![rust](../../images/node-init.png)
 
 # 三. 创建账户并转账
 
@@ -191,12 +189,12 @@ pm2 start unc-node.ecosystem.config.js
 
 可见这台机器上的unc-node服务都正常启动了，并且运行正常，没有反复重启
 
-通过pm2 logs 确保unc-node服务已经正确启动了,  链同步快照都下载完成或者同步完成, 没有error 级别日志, 正常打印区块高度
+通过pm2 logs 确保unc-node服务已经正确启动了,  链同步快照都下载完成或者同步完成, 没有error级别日志, 正常打印区块高度
 we get something like this:
 
 ![node-log](../../images/node-log.svg)
 
-## 3. 发起质押
+## 3. 发起质押(前提是准备有token的账户)
 
 ```sh
 ## 直接发起质押, 100K unc
