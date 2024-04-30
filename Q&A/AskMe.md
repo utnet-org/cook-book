@@ -1,4 +1,4 @@
-## Question 
+## trouble-shooting 
 
 Q: 是不是只需要部署miner server和worker就行，node不需要部署
 A: 部署node, 作为全节点使用, unc node部署在那里？server机器还是worker机器？ 在miner
@@ -26,7 +26,8 @@ Q: $ sudo go build -o ../workerserver no Go files in /opt/uminer/miner-server
 A: 先go mod tidy一下
 
 Q: protoc --go_out=. --go-grpc_out=. ./chip.proto, 没有安装protoc
-A: go install google.golang.org/protobuf/cmd/protoc-gen-go && chmod +x $GOPATH/bin/protoc-gen-go && 设置 path：export PATH=$PATH:$GOPATH/bin
+A: go install google.golang.org/protobuf/cmd/protoc-gen-go
+chmod +x $GOPATH/bin/protoc-gen-go && 设置 path：export PATH=$PATH:$GOPATH/bin
 在各自目录下，protoc各自的proto 都执行一遍
 
 Q: unc-node、unc-cli和miner server/worker的关系?

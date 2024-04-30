@@ -14,9 +14,8 @@
 
 # Misc
 
-- [Overview](./misc/README.md)
+- [Misc](./misc/README.md)
 
 # Q&A
 
-- [Overview](./Q&A/README.md)
-- [Q-A](./Q&A/AskMe.md)
+- [TroubleShooting](./Q&A/AskMe.md)
