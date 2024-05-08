@@ -173,10 +173,20 @@ we get something like this:
 
 ![pm2](../../images/pm2.svg)
 
-## 2. 服务启动
+## 2. 服务启动和关闭
 
 ```sh
+# 运行节点
 pm2 start unc-node.ecosystem.config.js
+
+# 停止节点
+pm2 stop unc-node.ecosystem.config.js
+
+# 查看日志
+pm2 logs
+
+# 更多命令或GPT pm2
+pm2 --help
 ```
 
 通过pm2 list来查看服务的运行状态  
