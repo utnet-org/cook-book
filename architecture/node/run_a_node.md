@@ -1,6 +1,6 @@
 # 一. 环境准备
 
-我们的节点基于Ubuntu 2004/2204系统, 下面的操作都是在此系统下部署
+我们的节点基于Ubuntu 2004/2204 X86-64系统, 16core, 500G最低配置 下面的操作都是在此系统下部署
 
 ## 1. 部署机器
 
@@ -71,7 +71,7 @@ we get something like this:
 
 ![unc-node](../../images/node.png)
 
-## 2. 集群机器的统一配置
+## 2. 机器的标准配置
 
 + 确保libc的版本，可以运行我们rust编译出来的二进制程序
 
@@ -289,7 +289,7 @@ unc extensions create-challenge-rsa fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94
 git clone https://github.com/utnet-org/utility.git
 cd utility
 
-# rsa keyparis
+# rsa keys
 cargo run --package keypair-generator --bin keypair-generator -- --home=~/keys  --account-id=miner0 --generate-config  signer-keys --key-type=2 --num-keys=4
 
 # signer key
