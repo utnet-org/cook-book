@@ -240,7 +240,7 @@ unc extensions create-challenge-rsa fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94
 
 ```
 
-+ batch_register.json.sample 注册矿工配置信息
++ batch_register.json.sample 注册矿工配置信息,  字段`power` 默认单位是Tera即10.pow(12)
 
 ```json
 [
