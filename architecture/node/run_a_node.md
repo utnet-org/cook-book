@@ -53,11 +53,11 @@ curl --proto '=https' --tlsv1.2 -LsSf https://github.com/utnet-org/utility-cli-r
 cargo install unc-validator
 
 # 下载unc-node 节点, 如 2004/2204 任意适合包
-wget -O - https://github.com/utnet-org/utility/releases/download/v0.7.5/x86_64-ubuntu-2004-unc-node.tar.gz | tar -xz
+wget -O - https://github.com/utnet-org/utility/releases/download/v0.10.0/x86_64-ubuntu-2004-unc-node.tar.gz | tar -xz
 
 or
 
-wget -O - https://github.com/utnet-org/utility/releases/download/v0.7.5/x86_64-ubuntu-2204-unc-node.tar.gz | tar -xz
+wget -O - https://github.com/utnet-org/utility/releases/download/v0.10.0/x86_64-ubuntu-2204-unc-node.tar.gz | tar -xz
 
 
 # 解压得到 unc-node 二进制文件, 放置在/opt/unc-node/, 后面有用
