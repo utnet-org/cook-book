@@ -218,14 +218,22 @@ export CHAIN_ID=testnet
 
 # Only Set Once Time init node  after `unset INIT`
 export INIT=true
-
-# Run the image from the command line
-docker run -v $HOME/node-store:$UNC_HOME -e CHAIN_ID=$CHAIN_ID -e UNC_HOME=$UNC_HOME -e INIT=$INIT  \
-ghcr.io/utnet-org/utility:latest  \
--p 3030:3030 --name unc-node
 ```
 
-## docker-compose.yml
+### Run the image from the command line
+
+docker run \
+    -v $HOME/node-store:$UNC_HOME \
+    -e CHAIN_ID=$CHAIN_ID \
+    -e UNC_HOME=$UNC_HOME \
+    -e INIT=$INIT \
+    -p 3030:3030 -p 12345:12345 \
+    --name unc-node \
+    ghcr.io/utnet-org/utility:latest
+
+Or
+
+### docker-compose.yml
 
 ```yaml
 version: "3.8"
@@ -234,21 +242,22 @@ services:
     image: ghcr.io/utnet-org/utility:latest
     name: unc-node
     environment:
-      - UNC_HOME=$HOME/.unc
+      - UNC_HOME=${UNC_HOME:-/srv/.unc}
       - CHAIN_ID=testnet
       - INIT=true
     volumes:
-      - $HOME/node-store:$UNC_HOME
+      - ${HOME}/node-store:${UNC_HOME}
     ports:
       - 3030:3030
       - 12345:12345
 ```
 
 ```sh
-# List active containers in another window
+# 查看services
 docker-compose up
 docker ps
-docker exec -ti <container-id> /bin/bash
+docker logs -f unc-node
+docker exec -it <container-id> /bin/bash
 ```
 
 ## 3. 发起质押(前提是有token的账户)
