@@ -238,9 +238,8 @@ Or
 ```yaml
 version: "3.8"
 services:
-  utility:
+  unc-node:
     image: ghcr.io/utnet-org/utility:latest
-    name: unc-node
     environment:
       - UNC_HOME=${UNC_HOME:-/srv/.unc}
       - CHAIN_ID=testnet
