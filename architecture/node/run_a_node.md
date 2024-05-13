@@ -160,6 +160,8 @@ we get something like this:
 
 # 四. 正式部署服务和配置
 
+## pre-binaries 安装方式
+
 ## 1. 部署脚本
 
 + unc-node.ecosystem.config.js 文件内容如下:
@@ -204,6 +206,50 @@ pm2 --help
 we get something like this:
 
 ![node-log](../../images/node-log.svg)
+
+## Docker 安装方式
+
+```sh
+# Set node store location
+export UNC_HOME=$HOME/.unc
+
+# Set the node type
+export CHAIN_ID=testnet
+
+# Only Set Once Time init node  after `unset INIT`
+export INIT=true
+
+# Run the image from the command line
+docker run -v $HOME/node-store:$UNC_HOME -e CHAIN_ID=$CHAIN_ID -e UNC_HOME=$UNC_HOME \
+    ghcr.io/utnet-org/utility:latest \
+    INIT=$INIT -p 3030:3030 --name unc-node
+```
+
+## docker-compose.yml
+
+```yaml
+version: "3.8"
+services:
+  utility:
+    image: ghcr.io/utnet-org/utility:latest
+    name: unc-node
+    environment:
+      - UNC_HOME=$HOME/.unc
+      - CHAIN_ID=testnet
+      - INIT=true
+    volumes:
+      - $HOME/node-store:$UNC_HOME
+    ports:
+      - 3030:3030
+      - 12345:12345
+```
+
+```sh
+# List active containers in another window
+docker-compose up
+docker ps
+docker exec -ti <container-id> /bin/bash
+```
 
 ## 3. 发起质押(前提是有token的账户)
 
