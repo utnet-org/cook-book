@@ -354,7 +354,7 @@ cargo run --package keypair-generator --bin keypair-generator -- --home=~/keys  
 # node key
 cargo run --package keypair-generator --bin keypair-generator -- --home=~/keys  --account-id=miner0 --generate-config  node-key
 
-# validator key
+# validator key (a.k.a Create a wallet with keypair-generator)
 cargo run --package keypair-generator --bin keypair-generator -- --home=~/keys  --account-id=miner0 --generate-config  validator-key
 ```
 
