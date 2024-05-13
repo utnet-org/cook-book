@@ -255,7 +255,7 @@ services:
 
 ```sh
 # 查看services
-docker-compose up
+docker-compose up -d
 docker ps
 docker logs -f unc-node
 docker exec -it <container-id> /bin/bash
