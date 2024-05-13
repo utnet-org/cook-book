@@ -220,9 +220,9 @@ export CHAIN_ID=testnet
 export INIT=true
 
 # Run the image from the command line
-docker run -v $HOME/node-store:$UNC_HOME -e CHAIN_ID=$CHAIN_ID -e UNC_HOME=$UNC_HOME \
+docker run -v $HOME/node-store:$UNC_HOME -e CHAIN_ID=$CHAIN_ID -e UNC_HOME=$UNC_HOME -e INIT=$INIT  \
     ghcr.io/utnet-org/utility:latest \
-    INIT=$INIT -p 3030:3030 --name unc-node
+    -p 3030:3030 --name unc-node
 ```
 
 ## docker-compose.yml
