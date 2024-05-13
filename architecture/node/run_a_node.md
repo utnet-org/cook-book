@@ -222,6 +222,7 @@ export INIT=true
 
 ### Run the image from the command line
 
+```sh
 docker run \
     -v $HOME/node-store:$UNC_HOME \
     -e CHAIN_ID=$CHAIN_ID \
@@ -230,6 +231,7 @@ docker run \
     -p 3030:3030 -p 12345:12345 \
     --name unc-node \
     ghcr.io/utnet-org/utility:latest
+```
 
 Or
 
