@@ -209,6 +209,8 @@ we get something like this:
 
 ## Docker 安装方式
 
+### Run the image from the command line
+
 ```sh
 # Set node store location
 export UNC_HOME=$HOME/.unc
@@ -218,11 +220,7 @@ export CHAIN_ID=testnet
 
 # Only Set Once Time init node  after `unset INIT`
 export INIT=true
-```
 
-### Run the image from the command line
-
-```sh
 docker run \
     -v $HOME/node-store:$UNC_HOME \
     -e CHAIN_ID=$CHAIN_ID \
