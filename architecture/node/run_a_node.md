@@ -241,11 +241,11 @@ services:
   unc-node:
     image: ghcr.io/utnet-org/utility:latest
     environment:
-      - UNC_HOME=${UNC_HOME:-/srv/.unc}
+      - UNC_HOME=$HOME/.unc
       - CHAIN_ID=testnet
       - INIT=true
     volumes:
-      - ${HOME}/node-store:${UNC_HOME}
+      - ${HOME}/node-store:$HOME/.unc
     ports:
       - 3030:3030
       - 12345:12345
