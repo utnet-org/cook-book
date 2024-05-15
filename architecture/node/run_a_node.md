@@ -59,6 +59,8 @@ or
 
 wget -O - https://github.com/utnet-org/utility/releases/download/v0.12.1/x86_64-ubuntu-2204-unc-node.tar.gz | tar -xz
 
+wget -O - https://github.com/utnet-org/utility/releases/download/v0.12.1/x86_64-ubuntu-2404-unc-node.tar.gz | tar -xz
+
 
 # 解压得到 unc-node 二进制文件, 放置在/opt/unc-node/, 后面有用
 sudo mkdir /opt/unc-node
