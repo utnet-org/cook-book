@@ -52,7 +52,7 @@ curl --proto '=https' --tlsv1.2 -LsSf https://github.com/utnet-org/utility-cli-r
 # 安装验证者 validator-cli 工具
 curl --proto '=https' --tlsv1.2 -LsSf https://github.com/utnet-org/utility-validator-cli-rs/releases/download/v0.10.2/unc-validator-installer.sh | sh
 
-# 下载unc-node 节点, 如 2004/2204 任意适合包
+# 下载unc-node 节点, 如 2004/2204/2404 任意适合包
 wget -O - https://github.com/utnet-org/utility/releases/download/v0.12.1/x86_64-ubuntu-2004-unc-node.tar.gz | tar -xz
 
 or
