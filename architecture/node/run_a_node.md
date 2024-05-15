@@ -28,11 +28,11 @@ we get something like this:
 
 ![rust](../../images/rust.png)
 
-+ 安装常用的系统工具：netstat、iostat、awk、df、build-essential
++ 安装常用的系统工具：git 、curl、wget、build-essential
 + awk/df一般都是默认安装的，其它工具可使用以下命令安装：
 
 ```sh
-sudo apt install net-tools sysstat build-essential -y
+sudo apt install git curl wget build-essential -y
 ```
 
 + 安装openssl依赖
@@ -47,17 +47,17 @@ sudo apt-get install --assume-yes libudev-dev
 
 ```sh
 # 安装 unc-cli 工具
-curl --proto '=https' --tlsv1.2 -LsSf https://github.com/utnet-org/utility-cli-rs/releases/download/v0.8.2/utility-cli-rs-installer.sh | sh
+curl --proto '=https' --tlsv1.2 -LsSf https://github.com/utnet-org/utility-cli-rs/releases/download/v0.10.2/utility-cli-rs-installer.sh | sh
 
-# 安装验证者cli 工具
-cargo install unc-validator
+# 安装验证者 validator-cli 工具
+curl --proto '=https' --tlsv1.2 -LsSf https://github.com/utnet-org/utility-validator-cli-rs/releases/download/v0.10.2/unc-validator-installer.sh | sh
 
 # 下载unc-node 节点, 如 2004/2204 任意适合包
-wget -O - https://github.com/utnet-org/utility/releases/download/v0.10.0/x86_64-ubuntu-2004-unc-node.tar.gz | tar -xz
+wget -O - https://github.com/utnet-org/utility/releases/download/v0.12.1/x86_64-ubuntu-2004-unc-node.tar.gz | tar -xz
 
 or
 
-wget -O - https://github.com/utnet-org/utility/releases/download/v0.10.0/x86_64-ubuntu-2204-unc-node.tar.gz | tar -xz
+wget -O - https://github.com/utnet-org/utility/releases/download/v0.12.1/x86_64-ubuntu-2204-unc-node.tar.gz | tar -xz
 
 
 # 解压得到 unc-node 二进制文件, 放置在/opt/unc-node/, 后面有用
