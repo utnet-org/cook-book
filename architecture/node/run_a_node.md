@@ -1,24 +1,24 @@
-# 一. 环境准备
+# 一. Environmental preparation
 
-我们的节点基于Ubuntu 2004/2204 X86-64系统, 16core, 500G最低配置 下面的操作都是在此系统下部署
+Our nodes are based on Ubuntu 2004/2204 X86-64 system, 16core, 500G minimum configuration. The following operations are all deployed under this system.
 
-## 1. 部署机器
+## 1. Deploy machines
 
-部署相关工作
+Deployment related work
 
 ```sh
 
-# miner-mach 机器预装node.js
-# 使用 curl 下载 Node.js 18.x or beyond 安装脚本
+# miner-mach The machine is pre-installed with node.js
+# Use curl to download the Node.js 18.x or beyond installation script
 curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
 
-# 安装 Node.js
+# Install Node.js
 sudo apt-get install -y nodejs
 
-# 安装 pm2
+# Install pm2
 npm install -g pm2
 
-# 安装cargo
+# Install rust/cargo
 curl https://sh.rustup.rs -sSf | sh
 rustc --version
 
@@ -28,14 +28,14 @@ we get something like this:
 
 ![rust](../../images/rust.png)
 
-+ 安装常用的系统工具：git 、curl、wget、build-essential
-+ awk/df一般都是默认安装的，其它工具可使用以下命令安装：
++ Install commonly used system tools: git, curl, wget, build-essential
++ awk/df is generally installed by default. Other tools can be installed using the following commands:
 
 ```sh
 sudo apt install git curl wget build-essential -y
 ```
 
-+ 安装openssl依赖
++ Install openssl dependencies
 
 ```sh
 
@@ -43,21 +43,21 @@ sudo apt install pkg-config libssl-dev libclang-dev -y
 sudo apt-get install --assume-yes libudev-dev
 ```
 
-+ 安装unc cli 和 unc-node
++ Install unc-cli 和 unc-node
 
 ```sh
-# 安装 unc-cli 工具
+# Install unc-cli tool
 curl --proto '=https' --tlsv1.2 -LsSf https://github.com/utnet-org/utility-cli-rs/releases/download/v0.12.0/utility-cli-rs-installer.sh | sh
 
-# 下载unc-node 节点, 如 2004/2204/2404 任意适合包
-wget -O - https://github.com/utnet-org/utility/releases/download/v0.12.1/x86_64-ubuntu-2004-unc-node.tar.gz | tar -xz
+# download unc-node, ex: 2004/2204/2404 pre-binaries
+wget -O - https://github.com/utnet-org/utility/releases/download/v0.12.2/x86_64-ubuntu-2004-unc-node.tar.gz | tar -xz
 
-wget -O - https://github.com/utnet-org/utility/releases/download/v0.12.1/x86_64-ubuntu-2204-unc-node.tar.gz | tar -xz
+wget -O - https://github.com/utnet-org/utility/releases/download/v0.12.2/x86_64-ubuntu-2204-unc-node.tar.gz | tar -xz
 
-wget -O - https://github.com/utnet-org/utility/releases/download/v0.12.1/x86_64-ubuntu-2404-unc-node.tar.gz | tar -xz
+wget -O - https://github.com/utnet-org/utility/releases/download/v0.12.2/x86_64-ubuntu-2404-unc-node.tar.gz | tar -xz
 
 
-# 解压得到 unc-node 二进制文件, 放置在/opt/unc-node/, 后面有用
+# Unzip the unc-node binary file and place it in /opt/unc-node/, which will be useful later.
 sudo mkdir /opt/unc-node
 sudo chmod 777 /opt/unc-node
 cp unc-node  /opt/unc-node/
@@ -68,9 +68,9 @@ we get something like this:
 
 ![unc-node](../../images/node.png)
 
-## 2. 机器的标准配置
+## 2. Machine standard configuration
 
-+ 确保libc的版本，可以运行我们rust编译出来的二进制程序
++ Make sure that the version of libc can run the binary program compiled by our rust
 
 ```sh
 ldd --version
@@ -81,17 +81,17 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 Written by Roland McGrath and Ulrich Drepper.
 ```
 
-+ 机器上需要正确安装node(可shell正确执行node和npm命令)， version 18
++ Node needs to be installed correctly on the machine (the shell can correctly execute node and npm commands), version 18+
 
 ```sh
 node -v
 v21.7.3
 ```
   
-# 二. 配置文件的编写
+# 二. Writing configuration files
 
-***这个是新矿工节点的关键步骤***  
-下面创建新的描述目录，并在里面增加对应的配置文件
+***This is a key step for new miner nodes***
+Create a new description directory below and add the corresponding configuration file in it
 
 ```sh
 
@@ -99,14 +99,14 @@ v21.7.3
 /opt/unc-node/unc-node  --home /opt/unc-node  init --chain-id testnet --download-genesis --download-config
 
 # download snapshot data （optional）
-## install rclone 1.66.0 or beyond
-## Linux
+# install rclone 1.66.0 or beyond
+# Linux
 $ sudo apt install rclone
 
 $ mkdir -p ~/.config/rclone
 $ touch ~/.config/rclone/rclone.conf
 
-## rclone.conf
+# rclone.conf
 [unc_cf]
 type = s3
 provider = Cloudflare
@@ -115,12 +115,12 @@ access_key_id = 2ff213c3730df215a7cc56e28914092e
 secret_access_key = b28609e3869b43339c1267b59cf25aa5deff4097737d3848e1491e0729c3ff6c
 acl = public-read
 
-## download data 
+# download data 
 $ rclone copy --no-check-certificate unc_cf:unc/latest ./
 $ latest=$(cat latest)
 $ rclone copy --no-check-certificate --progress --transfers=6  unc_cf:unc/${latest:?}.tar.gz /tmp
 
-$ 解压快照到/opt/unc-node/data
+# Unzip the snapshot to /opt/unc-node/data
 tar -zxvf /tmp/${latest:?}.tar.gz -C /tmp  && mv /tmp/${latest:?}/data /opt/unc-node
 
 ```
@@ -129,21 +129,20 @@ we get something like this:
 
 ![rust](../../images/node-init.png)
 
-# 三. 创建账户并转账
+# 三. Create an account and transfer money
 
-## 使用 unc cli 创建账户/转账/添加key操作
+## Use unc cli to create accounts/transfer/add key operations
 
 ```sh
-## create new accounts 用例, 使用自己创建的account id 而不是用例里面的`fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94802ce420c94ebb25bc43`
+# create new accounts use case, use the account id you created instead of `fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94802ce420c94ebb25bc43` in the use case
 unc account create-account fund-later use-auto-generation save-to-folder ~/.unc-credentials/implicit
-## as follows:
-## fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94802ce420c94ebb25bc43.json
+# as follows:
+# fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94802ce420c94ebb25bc43.json
 
-## 通过unc基金会账户或者水龙头 给新创建的账户一些资助(pledge 质押需要unc 代币)`fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94802ce420c94ebb25bc43`  100K unc coin
+# Give some funding to the newly created account through the unc foundation account or faucet (pledge requires unc tokens) `fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94802ce420c94ebb25bc43`
 unc tokens unc send-unc fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94802ce420c94ebb25bc43 '100000 unc' network-config testnet sign-with-keychain send
 
-## 在 /opt/unc-node 目录下 执行`touch validator_key.json` 命令, 验证者信息, 从上面的创建的账户~/.unc-credentials/implicit 信息填写即可  (optional)
-
+## Execute the `touch validator_key.json` command in the /opt/unc-node directory, and fill in the verifier information from the account created above ~/.unc-credentials/implicit
 {
     "account_id": "fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94802ce420c94ebb25bc43"
     "public_key":"ed25519:EYM66gAFekoEgLjicPyvZQiFRrbvNsWjVDQQ11fASV3Q",
@@ -155,14 +154,14 @@ we get something like this:
 
 ![create-account](../../images/create-account.svg)
 
-# 四. 正式部署服务和配置
+# 四. Formal deployment of services and configuration
 
-## pre-binaries 安装方式
+## pre-binaries installation method
 
-## 1. 部署脚本
+## 1. Deployment script
 
-+ unc-node.ecosystem.config.js 文件内容如下:
-  其中unc-node 上面的下载节点路径
++ The contents of the `unc-node.ecosystem.config.js` file are as follows:
+  Among them, the download node path above unc-node
 
 ```js
 module.exports = {"apps":[{"name":"unc-node","script":"/opt/unc-node/unc-node","env":{"HOME":"/opt/unc-node"},"exec_mode":"fork","watch":"false","autorestart":true,"restart_delay":5000,"cwd":"/opt/unc-node","args":" --home=/opt/unc-node run"}]}
@@ -172,30 +171,33 @@ we get something like this:
 
 ![pm2](../../images/pm2.svg)
 
-## 2. 服务启动和关闭
+## 2. Service startup and shutdown
 
 ```sh
-# 运行节点
+# Running node
 pm2 start unc-node.ecosystem.config.js
 
-# 停止节点
+# Stopping node
 pm2 stop unc-node.ecosystem.config.js
 
-# 查看日志
+# View status
+pm2 list
+
+# View log
 pm2 logs
 
-# 更多命令或GPT pm2
+# More command or GPT pm2
 pm2 --help
 ```
 
-通过pm2 list来查看服务的运行状态  
-比如在miner-mach1上，pm2 list显式如下
+Check the running status of the service through pm2 list
+For example, on miner-mach1, the pm2 list is explicitly as follows:
 
 ┌────┬─────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
 │ id │ name        │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
 ├────┼─────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
 │ 0  │ unc-node    │ default     │ N/A     │ fork    │ 466460   │ 91s    │ 0    │ online    │ 0%       │ 154.5mb  │ ubuntu   │ enabled  │
-└────┴─────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+└────┴─────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────
 
 可见这台机器上的unc-node服务都正常启动了，并且运行正常，没有反复重启
 
@@ -204,7 +206,7 @@ we get something like this:
 
 ![node-log](../../images/node-log.svg)
 
-## Docker 安装方式
+## Docker installation method
 
 ### Run the image from the command line
 
@@ -249,49 +251,49 @@ services:
 ```
 
 ```sh
-# 查看services
+# view services
 docker-compose up -d
 docker ps
 docker logs -f unc-node
 docker exec -it <container-id> /bin/bash
 ```
 
-## 3. 发起质押(前提是有token的账户)
+## 3. Initiate pledge (provided there is an account with token)
 
 ```sh
-# 直接发起质押, 100K unc
+# Directly initiate pledge, 100K unc
 unc pledging directly pledge-proposal fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94802ce420c94ebb25bc43 ed25519:EYM66gAFekoEgLjicPyvZQiFRrbvNsWjVDQQ11fASV3Q '100000 UNC' network-config testnet sign-with-keychain send
 
-# 查看直接质押金额
+# Check the direct pledge amount
 unc pledging directly view-pledge fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94802ce420c94ebb25bc43 network-config testnet now
 
-# view tx status 查看tx 状态值 Success才行
+# view tx status View tx status value Success is required
 unc transaction view-status EWHzhriCRTbDVd9SH6Vk88hSHqzJ7pipXW6eUhWTBkvS network-config testnet
 
 ```
 
-## 4.注册矿工上链(只有基金会有权限操作)
+## 4.Register miners to upload to the chain (only the foundation has the authority to operate)
 
 ```sh
-## 使用基金会账户unc 注册Rsa2048 keys, ***batch_register.json.sample是矿工rsa keys文件, unc.json 是基金会unc账户 keys文件***  
+## Use the foundation account unc to register Rsa2048 keys, ***batch_register.json.sample is the miner rsa keys file, unc.json is the foundation unc account keys file***
 unc extensions register-rsa-keys unc use-file ~/keys/batch_register.json.sample with-init-call network-config custom sign-with-access-key-file ~/.unc-credentials/unc.json send
 ```
 
-## 添加 rsa public key 到验证者账户, 如`fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94802ce420c94ebb25bc43`
+## Add rsa public key to the validator account, such as `fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94802ce420c94ebb25bc43`
 
 ```sh
 unc account add-key fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94802ce420c94ebb25bc43 grant-full-access use-manually-provided-public-key rsa2048:2TuPVgMCHJy5atawrsADEzjP7MCVbyyCA89UW6Wvjp9HrAzK4ZdyEHxs7qVnPrrF3R6w3zNJoHz828bNNJq9f6FPqyq9hsRP47qNXu1mcxeqWmRr8TKTBMLQNzNcjZVm6qX2BiSdXetAZsjPBMC6TyC2smee4s5Mqc4uh5rc5v7Z6nHWGxttHbhHGUCyWtgNGgPevFB2odsTdaXgcgWKtR3zLD6qrbaw631yNEJhverkLMrQJz436L21JWkgXpcTDRYPNWnk7DbztgA6RcgLmve3EG125eW2c2Bj7DkkWAVeWHZnXboDM8kYhAEbfRqUuKwn9K1m9adMqfig4xmM5wxGGABu5dD1gmthQRytLF1y3o2kpTtgrsNyBVTkqV7eMR9qJhUxwiU1rXdQKJ network-config testnet sign-with-keychain send
 ```
 
-## 5.发起链上挑战(矿工领取算力, 周期性发起挑战)
+## 5.Initiate on-chain challenges (miners receive computing power and initiate challenges periodically)
 
 ```sh
-# ***challenge.json.sample是挑战信息, rsa_signer_key.json是rsa keys文件, 这个是模拟的, 真实的得由算力机器发起***
+# ***challenge.json.sample is the challenge information, rsa_signer_key.json is the rsa keys file, this is simulated, the real one must be initiated by the computing machine***
 unc extensions create-challenge-rsa fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94802ce420c94ebb25bc43 use-file ~/keys/challenge.json.sample without-init-call network-config custom sign-with-access-key-file ~/keys/rsa_signer_key.json send
 
 ```
 
-+ batch_register.json.sample 注册矿工配置信息,  字段`power` 默认单位是Tera即10.pow(12)
++ batch_register.json.sample Register miner configuration information, the field `power` default unit is Tera which is 10.pow(12)
 
 ```json
 [
@@ -322,7 +324,7 @@ unc extensions create-challenge-rsa fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94
 ]
 ```
 
-+ challenge.json.sample 激活算力, 发起挑战配置信息
++ challenge.json.sample Activate computing power and initiate challenge configuration information
 
 ```json
 {
@@ -331,7 +333,7 @@ unc extensions create-challenge-rsa fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94
 }
 ```
 
-+ rsa_signer_key.json 发起挑战用的是rsa2048 keys签名文件
++ rsa_signer_key.json The challenge is initiated using the rsa2048 keys signature file
 
 ```json
 {
@@ -341,9 +343,9 @@ unc extensions create-challenge-rsa fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94
 }
 ```
 
-## 各种类型keys生成工具`keypair-generator`
+## Various types of keys generation tools `keypair-generator`
 
-### 生成signer validator node 各种key
+### Generate various keys for signer validator node
 
 ```bash
 # prepare
@@ -363,6 +365,4 @@ cargo run --package keypair-generator --bin keypair-generator -- --home=~/keys  
 cargo run --package keypair-generator --bin keypair-generator -- --home=~/keys  --account-id=miner0 --generate-config  validator-key
 ```
 
-## 至此，节点已经冷启动完毕
-
-可以使用unc/unc-validator相关工具进行账户相关操作, 使用pm2 监控节点
+At this point, the node has been cold started. You can use unc related tools to perform account related operations, and use pm2 to monitor the node.
