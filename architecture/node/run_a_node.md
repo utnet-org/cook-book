@@ -47,15 +47,10 @@ sudo apt-get install --assume-yes libudev-dev
 
 ```sh
 # 安装 unc-cli 工具
-curl --proto '=https' --tlsv1.2 -LsSf https://github.com/utnet-org/utility-cli-rs/releases/download/v0.10.2/utility-cli-rs-installer.sh | sh
-
-# 安装验证者 validator-cli 工具
-curl --proto '=https' --tlsv1.2 -LsSf https://github.com/utnet-org/utility-validator-cli-rs/releases/download/v0.10.2/unc-validator-installer.sh | sh
+curl --proto '=https' --tlsv1.2 -LsSf https://github.com/utnet-org/utility-cli-rs/releases/download/v0.12.0/utility-cli-rs-installer.sh | sh
 
 # 下载unc-node 节点, 如 2004/2204/2404 任意适合包
 wget -O - https://github.com/utnet-org/utility/releases/download/v0.12.1/x86_64-ubuntu-2004-unc-node.tar.gz | tar -xz
-
-or
 
 wget -O - https://github.com/utnet-org/utility/releases/download/v0.12.1/x86_64-ubuntu-2204-unc-node.tar.gz | tar -xz
 
@@ -265,10 +260,10 @@ docker exec -it <container-id> /bin/bash
 
 ```sh
 # 直接发起质押, 100K unc
-unc-validator pledging pledge-proposal fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94802ce420c94ebb25bc43 ed25519:EYM66gAFekoEgLjicPyvZQiFRrbvNsWjVDQQ11fASV3Q '100000 UNC' network-config testnet sign-with-keychain send
+unc pledging directly pledge-proposal fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94802ce420c94ebb25bc43 ed25519:EYM66gAFekoEgLjicPyvZQiFRrbvNsWjVDQQ11fASV3Q '100000 UNC' network-config testnet sign-with-keychain send
 
 # 查看直接质押金额
-unc-validator pledging view-pledge fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94802ce420c94ebb25bc43 network-config testnet now
+unc pledging directly view-pledge fd09e7537ee95fd2e7b78ee0a2b10bb9db4ebe65dc94802ce420c94ebb25bc43 network-config testnet now
 
 # view tx status 查看tx 状态值 Success才行
 unc transaction view-status EWHzhriCRTbDVd9SH6Vk88hSHqzJ7pipXW6eUhWTBkvS network-config testnet
