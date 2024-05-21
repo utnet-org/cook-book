@@ -193,16 +193,18 @@ pm2 --help
 Check the running status of the service through pm2 list
 For example, on miner-mach1, the pm2 list is explicitly as follows:
 
+```sh
+root@ip-172-31-9-141:/opt/unc-node# pm2 list
 ┌────┬─────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
 │ id │ name        │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
 ├────┼─────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
-│ 0  │ unc-node    │ default     │ N/A     │ fork    │ 466460   │ 91s    │ 0    │ online    │ 0%       │ 154.5mb  │ ubuntu   │ enabled  │
-└────┴─────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────
+│ 0  │ unc-node    │ default     │ N/A     │ fork    │ 517383   │ 33s    │ 11   │ online    │ 0%       │ 270.4mb  │ root     │ enabled  │
+└────┴─────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+```
 
-可见这台机器上的unc-node服务都正常启动了，并且运行正常，没有反复重启
+It can be seen that the unc-node service on this machine has started normally and is running normally without repeated restarts.
 
-通过pm2 logs 确保unc-node服务已经正确启动了,  链同步快照都下载完成或者同步完成, 没有error级别日志, 正常打印区块高度
-we get something like this:
+Use pm2 logs to ensure that the unc-node service has been started correctly, the chain synchronization snapshots have been downloaded or synchronized, there are no error level logs, and the block height is printed normally.
 
 ![node-log](../../images/node-log.svg)
 
