@@ -50,11 +50,11 @@ sudo apt-get install --assume-yes libudev-dev
 curl --proto '=https' --tlsv1.2 -LsSf https://github.com/utnet-org/utility-cli-rs/releases/download/v0.12.0/utility-cli-rs-installer.sh | sh
 
 # download unc-node, ex: 2004/2204/2404 pre-binaries
-wget -O - https://github.com/utnet-org/utility/releases/download/v0.12.2/x86_64-ubuntu-2004-unc-node.tar.gz | tar -xz
+wget -O - https://github.com/utnet-org/utility/releases/download/v0.12.3/x86_64-ubuntu-2004-unc-node.tar.gz | tar -xz
 
-wget -O - https://github.com/utnet-org/utility/releases/download/v0.12.2/x86_64-ubuntu-2204-unc-node.tar.gz | tar -xz
+wget -O - https://github.com/utnet-org/utility/releases/download/v0.12.3/x86_64-ubuntu-2204-unc-node.tar.gz | tar -xz
 
-wget -O - https://github.com/utnet-org/utility/releases/download/v0.12.2/x86_64-ubuntu-2404-unc-node.tar.gz | tar -xz
+wget -O - https://github.com/utnet-org/utility/releases/download/v0.12.3/x86_64-ubuntu-2404-unc-node.tar.gz | tar -xz
 
 
 # Unzip the unc-node binary file and place it in /opt/unc-node/, which will be useful later.
